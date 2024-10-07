@@ -20,12 +20,15 @@ Integrantes:
 1. Introducción
   1.1. Contexto
   1.2. Objetivos del proyecto
+   
 2. Identificación del problema o necesidad
   2.1. Descripción del problema
   2.2. Justificación
+   
 3. Descripción de la solución
   3.1. Funcionalidades Implementadas
   3.2. Tecnologías Utilizadas
+   
 4. Modelo de Entidades
 5. Testing y Manejo de Errores
 6. Medidas de Seguridad Implementadas
@@ -49,6 +52,11 @@ Objetivos del Proyecto:
 # Identificación del Problema o Necesidad
 
 Descripción del Problema:
+
+La búsqueda y reserva de tours turísticos es complicada y dispersa, lo que dificulta a los usuarios encontrar opciones adecuadas de manera eficiente.(Falta mejorar)
+
+Justificación:
+Actualmente, los viajeros a menudo enfrentan dificultades al intentar encontrar y reservar tours debido a la falta de plataformas que integren todas las funcionalidades necesarias en un solo lugar. TourPlus ofrece una solución completa que combina búsqueda, recomendaciones, pagos seguros y comparaciones en una única plataforma, mejorando la experiencia del usuario y facilitando la planificación de viajes.
 
 
 
