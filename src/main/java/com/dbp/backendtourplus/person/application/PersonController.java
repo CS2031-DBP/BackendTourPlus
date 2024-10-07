@@ -38,15 +38,8 @@ public class PersonController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Person> updatePerson(@PathVariable Long id, @RequestBody PersonDto personDto) {
-        Optional<Person> optionalPerson = personService.findById(id);
-        if (optionalPerson.isPresent()) {
-            Person person = optionalPerson.get();
-            person.setFirstname(personDto.getFirstname());
-            person.setLastname(personDto.getLastname());
-            return ResponseEntity.ok(personService.save(person));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        Person updatedPerson = personService.updatePerson(id, personDto.getFirstname(), personDto.getLastname());
+        return ResponseEntity.ok(updatedPerson);
     }
 
     @DeleteMapping("/{id}")

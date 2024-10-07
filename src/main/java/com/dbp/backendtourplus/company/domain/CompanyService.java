@@ -1,5 +1,6 @@
 package com.dbp.backendtourplus.company.domain;
 
+
 import com.dbp.backendtourplus.company.infrastructure.CompanyRepository;
 import com.dbp.backendtourplus.exceptions.ResourceNotFoundException;
 import com.dbp.backendtourplus.user.domain.User;
@@ -33,7 +34,9 @@ public class CompanyService {
     public Company createCompany(Long userId, String name, String ruc) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));
-        Company company = new Company(name, ruc, user);
+        Company company = new Company();
+        company.setName(name);
+        company.setRuc(ruc);
         return companyRepository.save(company);
     }
 
@@ -46,6 +49,9 @@ public class CompanyService {
     }
 
     public void deleteCompany(Long id) {
+        if (!companyRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Company not found with id " + id);
+        }
         companyRepository.deleteById(id);
     }
 }

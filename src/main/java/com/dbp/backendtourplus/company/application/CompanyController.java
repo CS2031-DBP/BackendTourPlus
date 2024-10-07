@@ -2,23 +2,20 @@ package com.dbp.backendtourplus.company.application;
 
 import com.dbp.backendtourplus.company.domain.Company;
 import com.dbp.backendtourplus.company.domain.CompanyService;
-import com.dbp.backendtourplus.exceptions.ResourceNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.dbp.backendtourplus.company.dto.CompanyDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/companies")
+@RequiredArgsConstructor
 public class CompanyController {
 
     private final CompanyService companyService;
-
-    @Autowired
-    public CompanyController(CompanyService companyService) {
-        this.companyService = companyService;
-    }
 
     @GetMapping
     public List<Company> getAllCompanies() {
@@ -27,24 +24,35 @@ public class CompanyController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Company> getCompanyById(@PathVariable Long id) {
-        return companyService.getCompanyById(id)
-                .map(ResponseEntity::ok)
-                .orElseThrow(() -> new ResourceNotFoundException("Company not found with id " + id));
+        Optional<Company> company = companyService.getCompanyById(id);
+        return company.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Company createCompany(@RequestParam Long userId, @RequestParam String name, @RequestParam String ruc) {
-        return companyService.createCompany(userId, name, ruc);
+    public Company createCompany(@RequestBody CompanyDto companyDTO) {
+        return companyService.createCompany(companyDTO.getId(), companyDTO.getName(), companyDTO.getRuc());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Company> updateCompany(@PathVariable Long id, @RequestParam String name, @RequestParam String ruc) {
-        return ResponseEntity.ok(companyService.updateCompany(id, name, ruc));
+    public ResponseEntity<Company> updateCompany(@PathVariable Long id, @RequestBody CompanyDto companyDto) {
+        Optional<Company> optionalCompany = companyService.getCompanyById(id);
+        if (optionalCompany.isPresent()) {
+            Company company = optionalCompany.get();
+            company.setName(companyDto.getName());
+            company.setRuc(companyDto.getRuc());
+            return ResponseEntity.ok(companyService.updateCompany(id, companyDto.getName(), companyDto.getRuc()));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCompany(@PathVariable Long id) {
-        companyService.deleteCompany(id);
-        return ResponseEntity.noContent().build();
+        if (companyService.getCompanyById(id).isPresent()) {
+            companyService.deleteCompany(id);
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

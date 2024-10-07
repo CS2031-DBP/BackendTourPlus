@@ -1,5 +1,6 @@
 package com.dbp.backendtourplus.person.domain;
 
+import com.dbp.backendtourplus.exceptions.ResourceNotFoundException;
 import com.dbp.backendtourplus.person.infrastructure.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,18 @@ public class PersonService {
         return personRepository.save(person);
     }
 
+    public Person updatePerson(Long id, String firstname, String lastname) {
+        Person person = personRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Person not found with id " + id));
+        person.setFirstname(firstname);
+        person.setLastname(lastname);
+        return personRepository.save(person);
+    }
+
     public void deleteById(Long id) {
+        if (!personRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Person not found with id " + id);
+        }
         personRepository.deleteById(id);
     }
 }

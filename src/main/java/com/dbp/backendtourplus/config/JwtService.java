@@ -2,7 +2,6 @@ package com.dbp.backendtourplus.config;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import lombok.RequiredArgsConstructor;
 import com.dbp.backendtourplus.user.domain.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,14 +15,17 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
-@RequiredArgsConstructor
 public class JwtService {
 
     @Value("${jwt.secret}")
     private String secret;
 
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public JwtService(UserService userService) {
+        this.userService = userService;
+    }
 
     public String extractUsername(String token) {
         return JWT.decode(token).getSubject();
@@ -42,7 +44,6 @@ public class JwtService {
                 .withExpiresAt(expiration)
                 .sign(algorithm);
     }
-/*
     public void validateToken(String token, String userEmail) throws AuthenticationException {
 
         JWT.require(Algorithm.HMAC256(secret)).build().verify(token);
@@ -54,6 +55,5 @@ public class JwtService {
                 userDetails, token, userDetails.getAuthorities()));
         SecurityContextHolder.setContext(context);
     }
-*/
 }
 
