@@ -1,6 +1,6 @@
 package com.dbp.backendtourplus.user.application;
 
-
+import com.dbp.backendtourplus.exceptions.ResourceNotFoundException;
 import com.dbp.backendtourplus.user.domain.User;
 import com.dbp.backendtourplus.user.domain.UserService;
 import com.dbp.backendtourplus.user.dto.UserDto;
@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -26,19 +25,21 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        Optional<User> user = userService.findById(id);
-        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        User user = userService.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping
-    public User createUser(@Valid @RequestBody UserDto userDto) {
+    public ResponseEntity<User> createUser(@Valid @RequestBody UserDto userDto) {
         User user = new User();
         user.setFirstname(userDto.getFirstname());
         user.setLastname(userDto.getLastname());
         user.setEmail(userDto.getEmail());
         user.setPassword(userDto.getPassword());
         user.setRole(userDto.getRole());
-        return userService.save(user);
+        User savedUser = userService.save(user);
+        return ResponseEntity.ok(savedUser);
     }
 
     @PutMapping("/{id}")
@@ -49,11 +50,10 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        if (userService.findById(id).isPresent()) {
-            userService.deleteById(id);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
+        if (userService.findById(id).isEmpty()) {
+            throw new ResourceNotFoundException("User not found with id: " + id);
         }
+        userService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }

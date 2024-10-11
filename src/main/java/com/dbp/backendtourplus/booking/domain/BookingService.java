@@ -25,27 +25,36 @@ public class BookingService {
 
     public Booking save(BookingDto bookingDto) {
         Booking booking = new Booking();
-        booking.setBookingDate(bookingDto.getBookingDate());
-        booking.setBookingStatus(bookingDto.getBookingStatus());
-        booking.setTour(bookingDto.getTour());
         booking.setUser(bookingDto.getUser());
+        booking.setTourInstance(bookingDto.getTourInstance());
+        booking.setBookingStatus(bookingDto.getBookingStatus());
         return bookingRepository.save(booking);
     }
 
     public Booking updateBooking(Long id, BookingDto bookingDto) {
-        Booking booking = bookingRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id " + id));
-        booking.setBookingDate(bookingDto.getBookingDate());
-        booking.setBookingStatus(bookingDto.getBookingStatus());
-        booking.setTour(bookingDto.getTour());
-        booking.setUser(bookingDto.getUser());
-        return bookingRepository.save(booking);
+        return bookingRepository.findById(id).map(existingBooking -> {
+            existingBooking.setUser(bookingDto.getUser());
+            existingBooking.setTourInstance(bookingDto.getTourInstance());
+            existingBooking.setBookingStatus(bookingDto.getBookingStatus());
+            return bookingRepository.save(existingBooking);
+        }).orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + id));
     }
 
     public void deleteById(Long id) {
         if (!bookingRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Booking not found with id " + id);
+            throw new ResourceNotFoundException("Booking not found with id: " + id);
         }
         bookingRepository.deleteById(id);
+    }
+
+    public boolean existsById(Long id) {
+        return bookingRepository.existsById(id);
+    }
+
+
+    public boolean isBookingOwner(Long bookingId, String username) {
+        return bookingRepository.findById(bookingId)
+                .map(booking -> booking.getUser().getUsername().equals(username))
+                .orElse(false);
     }
 }

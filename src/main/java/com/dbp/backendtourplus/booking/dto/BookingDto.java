@@ -18,7 +18,7 @@ public class BookingDto {
     private BookingStatus bookingStatus;
 
     @NotNull(message = "La instancia de tour no puede ser nula")
-    private TourInstance tour;
+    private TourInstance tourInstance;
 
     @NotNull(message = "La persona no puede ser nula")
     private Person user;

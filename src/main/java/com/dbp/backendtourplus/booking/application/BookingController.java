@@ -3,8 +3,10 @@ package com.dbp.backendtourplus.booking.application;
 import com.dbp.backendtourplus.booking.domain.Booking;
 import com.dbp.backendtourplus.booking.domain.BookingService;
 import com.dbp.backendtourplus.booking.dto.BookingDto;
+import com.dbp.backendtourplus.exceptions.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,31 +19,48 @@ public class BookingController {
 
     private final BookingService bookingService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public List<Booking> getAllBookings() {
         return bookingService.findAll();
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public ResponseEntity<Booking> getBookingById(@PathVariable Long id) {
         Optional<Booking> booking = bookingService.findById(id);
-        return booking.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        if (booking.isEmpty()) {
+            throw new ResourceNotFoundException("Booking not found with id: " + id);
+        }
+        return ResponseEntity.ok(booking.get());
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping
     public Booking createBooking(@RequestBody BookingDto bookingDto) {
         return bookingService.save(bookingDto);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PutMapping("/{id}")
     public ResponseEntity<Booking> updateBooking(@PathVariable Long id, @RequestBody BookingDto bookingDto) {
-        Booking updatedBooking = bookingService.updateBooking(id, bookingDto);
-        return ResponseEntity.ok(updatedBooking);
+        if (bookingService.existsById(id)) {
+            Booking updatedBooking = bookingService.updateBooking(id, bookingDto);
+            return ResponseEntity.ok(updatedBooking);
+        } else {
+            throw new ResourceNotFoundException("Booking not found with id: " + id);
+        }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBooking(@PathVariable Long id) {
-        bookingService.deleteById(id);
-        return ResponseEntity.noContent().build();
+        if (bookingService.existsById(id)) {
+            bookingService.deleteById(id);
+            return ResponseEntity.noContent().build();
+        } else {
+            throw new ResourceNotFoundException("Booking not found with id: " + id);
+        }
     }
+
 }
