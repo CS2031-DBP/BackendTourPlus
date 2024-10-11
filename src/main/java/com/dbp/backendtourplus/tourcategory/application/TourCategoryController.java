@@ -1,7 +1,9 @@
 package com.dbp.backendtourplus.tourcategory.application;
 
+import com.dbp.backendtourplus.exceptions.ResourceNotFoundException;
 import com.dbp.backendtourplus.tourcategory.domain.TourCategory;
 import com.dbp.backendtourplus.tourcategory.domain.TourCategoryService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,34 +11,34 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/tour-categories")
+@RequiredArgsConstructor
 public class TourCategoryController {
 
     private final TourCategoryService tourCategoryService;
 
-    public TourCategoryController(TourCategoryService tourCategoryService) {
-        this.tourCategoryService = tourCategoryService;
-    }
-
     @GetMapping
-    public List<TourCategory> getAllTourCategories() {
-        return tourCategoryService.findAll();
+    public ResponseEntity<List<TourCategory>> getAllTourCategories() {
+        List<TourCategory> categories = tourCategoryService.findAll();
+        return ResponseEntity.ok(categories);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<TourCategory> getTourCategoryById(@PathVariable Long id) {
-        TourCategory tourCategory = tourCategoryService.findById(id);
+        TourCategory tourCategory = tourCategoryService.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tour Category not found with id: " + id));
         return ResponseEntity.ok(tourCategory);
     }
 
     @PostMapping
-    public TourCategory createTourCategory(@RequestBody TourCategory tourCategory) {
-        return tourCategoryService.save(tourCategory);
+    public ResponseEntity<TourCategory> createTourCategory(@RequestBody TourCategory tourCategory) {
+        TourCategory newCategory = tourCategoryService.save(tourCategory);
+        return ResponseEntity.ok(newCategory);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<TourCategory> updateTourCategory(@PathVariable Long id, @RequestBody TourCategory tourCategory) {
-        TourCategory updatedTourCategory = tourCategoryService.update(id, tourCategory);
-        return ResponseEntity.ok(updatedTourCategory);
+        TourCategory updatedCategory = tourCategoryService.update(id, tourCategory);
+        return ResponseEntity.ok(updatedCategory);
     }
 
     @DeleteMapping("/{id}")

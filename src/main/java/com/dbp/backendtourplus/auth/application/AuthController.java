@@ -27,12 +27,12 @@ public class AuthController {
     private final JwtService jwtService;
 
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody RegisterReq registerReq) {
+    public ResponseEntity<String> register(@RequestBody RegisterReq registerReq) {
         try {
-            User user = authService.register(registerReq);
-            return ResponseEntity.status(HttpStatus.CREATED).body(user);
-        } catch (UserAlreadyExistException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+            authService.register(registerReq);
+            return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
+        } catch (UserAlreadyExistException ex) {
+            throw ex;
         }
     }
 

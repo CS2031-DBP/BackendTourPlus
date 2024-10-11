@@ -27,17 +27,17 @@ public class PersonService {
     }
 
     public Person updatePerson(Long id, String firstname, String lastname) {
-        Person person = personRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Person not found with id " + id));
-        person.setFirstname(firstname);
-        person.setLastname(lastname);
-        return personRepository.save(person);
+        Optional<Person> personOptional = personRepository.findById(id);
+        if (personOptional.isPresent()) {
+            Person person = personOptional.get();
+            person.setFirstname(firstname);
+            person.setLastname(lastname);
+            return personRepository.save(person);
+        }
+        throw new ResourceNotFoundException("Person not found with id: " + id);
     }
 
     public void deleteById(Long id) {
-        if (!personRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Person not found with id " + id);
-        }
         personRepository.deleteById(id);
     }
 }

@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Map;
 
 @Data
 @Entity
@@ -26,9 +25,6 @@ public class Tour {
 
     @ManyToOne
     private TourCategory tourCategory;
-
-    @ElementCollection
-    private Map<String, String> frequentQuestions; 
 
     @ElementCollection
     private List<String> imageUrls;

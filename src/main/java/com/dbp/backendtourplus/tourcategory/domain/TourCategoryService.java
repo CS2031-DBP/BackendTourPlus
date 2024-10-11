@@ -4,11 +4,14 @@ import com.dbp.backendtourplus.exceptions.ResourceNotFoundException;
 import com.dbp.backendtourplus.tourcategory.infrastructure.TourCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class TourCategoryService {
 
     private final TourCategoryRepository tourCategoryRepository;
@@ -17,9 +20,8 @@ public class TourCategoryService {
         return tourCategoryRepository.findAll();
     }
 
-    public TourCategory findById(Long id) {
-        return tourCategoryRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Tour category not found with id " + id));
+    public Optional<TourCategory> findById(Long id) {
+        return tourCategoryRepository.findById(id);
     }
 
     public TourCategory save(TourCategory tourCategory) {
@@ -27,15 +29,17 @@ public class TourCategoryService {
     }
 
     public TourCategory update(Long id, TourCategory tourCategoryDetails) {
-        TourCategory tourCategory = findById(id);
-        tourCategory.setName(tourCategoryDetails.getName());
-        tourCategory.setDescription(tourCategoryDetails.getDescription());
-        return tourCategoryRepository.save(tourCategory);
+        return tourCategoryRepository.findById(id)
+                .map(existingCategory -> {
+                    existingCategory.setName(tourCategoryDetails.getName());
+                    existingCategory.setDescription(tourCategoryDetails.getDescription());
+                    return tourCategoryRepository.save(existingCategory);
+                }).orElseThrow(() -> new ResourceNotFoundException("Tour Category not found with id: " + id));
     }
 
     public void deleteById(Long id) {
         if (!tourCategoryRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Tour category not found with id " + id);
+            throw new ResourceNotFoundException("Tour Category not found with id: " + id);
         }
         tourCategoryRepository.deleteById(id);
     }

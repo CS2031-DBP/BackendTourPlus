@@ -23,7 +23,7 @@ public class Booking {
     private BookingStatus bookingStatus;
 
     @ManyToOne
-    private TourInstance tour;
+    private TourInstance tourInstance;
 
     @ManyToOne
     private Person user;

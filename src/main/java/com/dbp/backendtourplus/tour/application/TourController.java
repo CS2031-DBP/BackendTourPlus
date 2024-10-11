@@ -1,8 +1,9 @@
 package com.dbp.backendtourplus.tour.application;
 
+import com.dbp.backendtourplus.exceptions.ResourceNotFoundException;
 import com.dbp.backendtourplus.tour.domain.Tour;
-import com.dbp.backendtourplus.tour.dto.TourDto;
 import com.dbp.backendtourplus.tour.domain.TourService;
+import com.dbp.backendtourplus.tour.dto.TourDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +20,14 @@ public class TourController {
 
     @GetMapping
     public ResponseEntity<List<Tour>> getAllTours() {
-        return ResponseEntity.ok(tourService.findAll());
+        List<Tour> tours = tourService.findAll();
+        return ResponseEntity.ok(tours);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Tour> getTourById(@PathVariable Long id) {
-        return ResponseEntity.ok(tourService.findById(id));
+        Tour tour = tourService.findById(id);
+        return ResponseEntity.ok(tour);
     }
 
     @PostMapping

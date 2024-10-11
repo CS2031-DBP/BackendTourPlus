@@ -1,5 +1,6 @@
 package com.dbp.backendtourplus.tourinstance.application;
 
+import com.dbp.backendtourplus.exceptions.ResourceNotFoundException;
 import com.dbp.backendtourplus.tourinstance.domain.TourInstance;
 import com.dbp.backendtourplus.tourinstance.dto.TourInstanceDto;
 import com.dbp.backendtourplus.tourinstance.domain.TourInstanceService;
@@ -23,17 +24,21 @@ public class TourInstanceController {
 
     @GetMapping("/{id}")
     public ResponseEntity<TourInstance> getTourInstanceById(@PathVariable Long id) {
-        return ResponseEntity.of(tourInstanceService.findById(id));
+        TourInstance tourInstance = tourInstanceService.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("TourInstance not found with id: " + id));
+        return ResponseEntity.ok(tourInstance);
     }
 
     @PostMapping
-    public TourInstance createTourInstance(@RequestBody TourInstanceDto tourInstanceDto) {
-        return tourInstanceService.save(tourInstanceDto);
+    public ResponseEntity<TourInstance> createTourInstance(@RequestBody TourInstanceDto tourInstanceDto) {
+        TourInstance createdTourInstance = tourInstanceService.save(tourInstanceDto);
+        return ResponseEntity.ok(createdTourInstance);
     }
 
     @PutMapping("/{id}")
-    public TourInstance updateTourInstance(@PathVariable Long id, @RequestBody TourInstanceDto tourInstanceDto) {
-        return tourInstanceService.update(id, tourInstanceDto);
+    public ResponseEntity<TourInstance> updateTourInstance(@PathVariable Long id, @RequestBody TourInstanceDto tourInstanceDto) {
+        TourInstance updatedTourInstance = tourInstanceService.update(id, tourInstanceDto);
+        return ResponseEntity.ok(updatedTourInstance);
     }
 
     @DeleteMapping("/{id}")
