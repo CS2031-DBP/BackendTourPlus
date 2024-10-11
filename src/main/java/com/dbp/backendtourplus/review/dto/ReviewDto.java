@@ -1,6 +1,5 @@
 package com.dbp.backendtourplus.review.dto;
 
-
 import com.dbp.backendtourplus.user.domain.User;
 import com.dbp.backendtourplus.tour.domain.Tour;
 import jakarta.validation.constraints.NotBlank;
@@ -10,7 +9,6 @@ import lombok.Data;
 
 @Data
 public class ReviewDto {
-
     @NotNull(message = "El autor no puede ser nulo")
     private User author;
 

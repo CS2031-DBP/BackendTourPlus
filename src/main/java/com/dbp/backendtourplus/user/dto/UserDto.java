@@ -1,6 +1,5 @@
 package com.dbp.backendtourplus.user.dto;
 
-
 import com.dbp.backendtourplus.user.domain.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -8,7 +7,6 @@ import lombok.Data;
 
 @Data
 public class UserDto {
-
     @NotBlank(message = "El nombre no puede estar vacío")
     private String firstname;
 
