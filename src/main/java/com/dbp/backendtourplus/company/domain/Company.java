@@ -5,9 +5,11 @@ import com.dbp.backendtourplus.tour.domain.Tour;
 import com.dbp.backendtourplus.user.domain.User;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @Inheritance(strategy = InheritanceType.JOINED)
