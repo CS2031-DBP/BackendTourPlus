@@ -4,6 +4,7 @@ package com.dbp.backendtourplus.user.application;
 import com.dbp.backendtourplus.user.domain.User;
 import com.dbp.backendtourplus.user.domain.UserService;
 import com.dbp.backendtourplus.user.dto.UserDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class UserController {
     }
 
     @PostMapping
-    public User createUser(@RequestBody UserDto userDto) {
+    public User createUser(@Valid @RequestBody UserDto userDto) {
         User user = new User();
         user.setFirstname(userDto.getFirstname());
         user.setLastname(userDto.getLastname());

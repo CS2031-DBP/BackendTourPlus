@@ -1,11 +1,11 @@
 package com.dbp.backendtourplus.user.domain;
 
-
 import com.dbp.backendtourplus.exceptions.ResourceNotFoundException;
 import com.dbp.backendtourplus.user.exceptions.UserNotFoundException;
 import com.dbp.backendtourplus.user.infrastructure.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +16,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UserDetailsService userDetailsService() {
         return username -> userRepository
@@ -32,6 +33,7 @@ public class UserService {
     }
 
     public User save(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -41,7 +43,9 @@ public class UserService {
         user.setFirstname(firstname);
         user.setLastname(lastname);
         user.setEmail(email);
-        user.setPassword(password);
+        if (password != null && !password.isEmpty()) {
+            user.setPassword(passwordEncoder.encode(password));
+        }
         user.setRole(role);
         return userRepository.save(user);
     }
