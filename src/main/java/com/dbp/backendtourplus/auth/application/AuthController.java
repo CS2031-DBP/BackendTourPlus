@@ -3,6 +3,7 @@ package com.dbp.backendtourplus.auth.application;
 import com.dbp.backendtourplus.auth.dto.JwtAuthResponse;
 import com.dbp.backendtourplus.auth.dto.LoginReq;
 import com.dbp.backendtourplus.auth.dto.RegisterReq;
+import com.dbp.backendtourplus.auth.exceptions.UserAlreadyExistException;
 import com.dbp.backendtourplus.config.JwtService;
 import com.dbp.backendtourplus.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +28,12 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody RegisterReq registerReq) {
-        User user = authService.register(registerReq);
-        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+        try {
+            User user = authService.register(registerReq);
+            return ResponseEntity.status(HttpStatus.CREATED).body(user);
+        } catch (UserAlreadyExistException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
     }
 
     @PostMapping("/login")
