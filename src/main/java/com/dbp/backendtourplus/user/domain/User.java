@@ -1,6 +1,5 @@
 package com.dbp.backendtourplus.user.domain;
 
-
 import com.dbp.backendtourplus.company.domain.Company;
 import com.dbp.backendtourplus.person.domain.Person;
 import jakarta.persistence.*;
@@ -19,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
 public class User implements UserDetails {
 
@@ -33,7 +33,7 @@ public class User implements UserDetails {
     private String lastname;
 
     @Email
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "password", nullable = false)

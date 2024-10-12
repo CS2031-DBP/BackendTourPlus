@@ -33,10 +33,9 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/**").permitAll()
-                                .anyRequest().authenticated()
-                )
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/**").permitAll()
+                        .anyRequest().authenticated())
                 .build();
     }
 
@@ -56,7 +55,6 @@ public class SecurityConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3000") // Ajusta según el origen del frontend
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);

@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.dbp.backendtourplus.user.domain.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
@@ -20,18 +21,15 @@ public class JwtService {
     @Value("${jwt.secret}")
     private String secret;
 
-    private final UserService userService;
-
     @Autowired
-    public JwtService(UserService userService) {
-        this.userService = userService;
-    }
+    @Lazy
+    private UserService userService;
 
     public String extractUsername(String token) {
         return JWT.decode(token).getSubject();
     }
 
-    public String generateToken(UserDetails data){
+    public String generateToken(UserDetails data) {
         Date now = new Date();
         Date expiration = new Date(now.getTime() + 1000 * 60 * 60 * 10);
 
@@ -44,8 +42,8 @@ public class JwtService {
                 .withExpiresAt(expiration)
                 .sign(algorithm);
     }
-    public void validateToken(String token, String userEmail) throws AuthenticationException {
 
+    public void validateToken(String token, String userEmail) throws AuthenticationException {
         JWT.require(Algorithm.HMAC256(secret)).build().verify(token);
 
         UserDetails userDetails = userService.userDetailsService().loadUserByUsername(userEmail);
@@ -56,4 +54,3 @@ public class JwtService {
         SecurityContextHolder.setContext(context);
     }
 }
-

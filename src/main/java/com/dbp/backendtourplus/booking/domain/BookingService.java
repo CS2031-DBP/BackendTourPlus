@@ -25,7 +25,7 @@ public class BookingService {
 
     public Booking save(BookingDto bookingDto) {
         Booking booking = new Booking();
-        booking.setUser(bookingDto.getUser());
+        booking.setPerson(bookingDto.getUser()); // Cambia 'setUser' a 'setPerson'
         booking.setTourInstance(bookingDto.getTourInstance());
         booking.setBookingStatus(bookingDto.getBookingStatus());
         return bookingRepository.save(booking);
@@ -33,7 +33,7 @@ public class BookingService {
 
     public Booking updateBooking(Long id, BookingDto bookingDto) {
         return bookingRepository.findById(id).map(existingBooking -> {
-            existingBooking.setUser(bookingDto.getUser());
+            existingBooking.setPerson(bookingDto.getUser());
             existingBooking.setTourInstance(bookingDto.getTourInstance());
             existingBooking.setBookingStatus(bookingDto.getBookingStatus());
             return bookingRepository.save(existingBooking);
@@ -50,11 +50,5 @@ public class BookingService {
     public boolean existsById(Long id) {
         return bookingRepository.existsById(id);
     }
-
-
-    public boolean isBookingOwner(Long bookingId, String username) {
-        return bookingRepository.findById(bookingId)
-                .map(booking -> booking.getUser().getUsername().equals(username))
-                .orElse(false);
-    }
 }
+

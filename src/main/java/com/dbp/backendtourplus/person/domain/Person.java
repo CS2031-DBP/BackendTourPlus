@@ -1,6 +1,5 @@
 package com.dbp.backendtourplus.person.domain;
 
-
 import com.dbp.backendtourplus.booking.domain.Booking;
 import com.dbp.backendtourplus.user.domain.User;
 import jakarta.persistence.*;
@@ -18,4 +17,8 @@ public class Person extends User {
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Booking> bookings;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

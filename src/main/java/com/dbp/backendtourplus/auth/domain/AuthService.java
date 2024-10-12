@@ -16,7 +16,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public User register(RegisterReq registerReq) {
+    public void register(RegisterReq registerReq) {
         if (userRepository.existsByEmail(registerReq.getEmail())) {
             throw new UserAlreadyExistException("El email ya está en uso");
         }
@@ -28,7 +28,7 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(registerReq.getPassword()));
         user.setRole(Role.USER);
 
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 }
 
