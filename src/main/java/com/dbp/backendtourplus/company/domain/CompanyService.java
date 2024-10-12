@@ -22,19 +22,21 @@ public class CompanyService {
         return companyRepository.findById(id);
     }
 
-    public Company createCompany(Long id, String name, String ruc) {
+    public Company createCompany(Long id, String name, String ruc, String email) {
         Company company = new Company();
         company.setId(id);
         company.setName(name);
         company.setRuc(ruc);
+        company.setEmail(email);
         return companyRepository.save(company);
     }
 
-    public Company updateCompany(Long id, String name, String ruc) {
+    public Company updateCompany(Long id, String name, String ruc, String email) {
         Company company = companyRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Company not found with id: " + id));
         company.setName(name);
         company.setRuc(ruc);
+        company.setEmail(email);
         return companyRepository.save(company);
     }
 

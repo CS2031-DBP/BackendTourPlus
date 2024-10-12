@@ -1,5 +1,6 @@
 package com.dbp.backendtourplus.company.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -12,4 +13,8 @@ public class CompanyDto {
 
     @NotBlank(message = "El RUC no puede estar vacío")
     private String ruc;
+
+    @NotBlank(message = "El email no puede estar vacío")
+    @Email
+    private String email;
 }

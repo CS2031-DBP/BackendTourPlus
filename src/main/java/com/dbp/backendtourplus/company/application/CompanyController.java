@@ -34,7 +34,7 @@ public class CompanyController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public Company createCompany(@RequestBody CompanyDto companyDTO) {
-        return companyService.createCompany(companyDTO.getId(), companyDTO.getName(), companyDTO.getRuc());
+        return companyService.createCompany(companyDTO.getId(), companyDTO.getName(), companyDTO.getRuc(), companyDTO.getEmail());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -45,7 +45,8 @@ public class CompanyController {
             Company company = optionalCompany.get();
             company.setName(companyDto.getName());
             company.setRuc(companyDto.getRuc());
-            return ResponseEntity.ok(companyService.updateCompany(id, companyDto.getName(), companyDto.getRuc()));
+            company.setEmail(companyDto.getEmail());
+            return ResponseEntity.ok(companyService.updateCompany(id, companyDto.getName(), companyDto.getRuc(), companyDto.getEmail()));
         } else {
             return ResponseEntity.notFound().build();
         }
