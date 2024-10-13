@@ -2,12 +2,14 @@ package com.dbp.backendtourplus.booking.domain;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
 public class BookingTest {
 
     private Booking booking;
@@ -30,9 +32,12 @@ public class BookingTest {
     }
 
     @Test
-    void testBookingUpdate() {
+    void testBookingUpdate() throws InterruptedException {
         LocalDateTime oldUpdatedAt = booking.getUpdatedAt();
         booking.setBookingStatus(BookingStatus.CONFIRMED);
+
+        Thread.sleep(10);
+
         booking.setUpdatedAt(LocalDateTime.now());
 
         assertNotEquals(oldUpdatedAt, booking.getUpdatedAt(), "La fecha de actualización debería cambiar");
