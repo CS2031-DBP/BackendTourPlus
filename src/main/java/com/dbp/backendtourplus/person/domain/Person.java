@@ -22,6 +22,9 @@ public class Person {
     @Column(name = "last_name", nullable = false)
     private String lastname;
 
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

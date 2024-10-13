@@ -1,6 +1,7 @@
 package com.dbp.backendtourplus.tourcategory.domain;
 
 import com.dbp.backendtourplus.tour.domain.Tour;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,5 +27,6 @@ public class TourCategory {
     private String description;
 
     @OneToMany(mappedBy = "tourCategory", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Tour> tours;
 }

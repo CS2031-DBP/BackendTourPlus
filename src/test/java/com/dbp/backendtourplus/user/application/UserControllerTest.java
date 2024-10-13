@@ -9,9 +9,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,12 +25,16 @@ import static org.mockito.Mockito.*;
 public class UserControllerTest {
 
     private UserController userController;
+
+    @MockBean
     private UserService userService;
+
+    @MockBean
+    private ApplicationEventPublisher eventPublisher;
 
     @BeforeEach
     void setUp() {
-        userService = Mockito.mock(UserService.class);
-        userController = new UserController(userService);
+        userController = new UserController(userService, eventPublisher);
     }
 
     @Test
@@ -48,12 +53,18 @@ public class UserControllerTest {
     void testGetUserById_Found() {
         Long userId = 1L;
         User user = new User();
+        user.setFirstname("John");
+        user.setLastname("Doe");
+        user.setEmail("john.doe@example.com");
         when(userService.findById(userId)).thenReturn(Optional.of(user));
 
-        ResponseEntity<User> response = userController.getUserById(userId);
+        ResponseEntity<UserDto> response = userController.getUserById(userId);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(user, response.getBody());
+        assertNotNull(response.getBody());
+        assertEquals(user.getFirstname(), response.getBody().getFirstname());
+        assertEquals(user.getLastname(), response.getBody().getLastname());
+        assertEquals(user.getEmail(), response.getBody().getEmail());
     }
 
     @Test
@@ -74,12 +85,20 @@ public class UserControllerTest {
         userDto.setRole(Role.USER);
 
         User savedUser = new User();
+        savedUser.setFirstname(userDto.getFirstname());
+        savedUser.setLastname(userDto.getLastname());
+        savedUser.setEmail(userDto.getEmail());
+        savedUser.setRole(userDto.getRole());
+
         when(userService.createUser(any(User.class))).thenReturn(savedUser);
 
         ResponseEntity<User> response = userController.createUser(userDto);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(savedUser, response.getBody());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(savedUser.getFirstname(), response.getBody().getFirstname());
+        assertEquals(savedUser.getLastname(), response.getBody().getLastname());
+        assertEquals(savedUser.getEmail(), response.getBody().getEmail());
         verify(userService, times(1)).createUser(any(User.class));
     }
 
@@ -88,12 +107,19 @@ public class UserControllerTest {
         Long userId = 1L;
         UserDto userDto = new UserDto();
         User updatedUser = new User();
+        updatedUser.setFirstname("Jane");
+        updatedUser.setLastname("Doe");
+        updatedUser.setEmail("jane.doe@example.com");
+
         when(userService.updateUser(userId, userDto)).thenReturn(updatedUser);
 
         ResponseEntity<User> response = userController.updateUser(userId, userDto);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(updatedUser, response.getBody());
+        assertNotNull(response.getBody());
+        assertEquals(updatedUser.getFirstname(), response.getBody().getFirstname());
+        assertEquals(updatedUser.getLastname(), response.getBody().getLastname());
+        assertEquals(updatedUser.getEmail(), response.getBody().getEmail());
         verify(userService, times(1)).updateUser(userId, userDto);
     }
 
@@ -116,5 +142,4 @@ public class UserControllerTest {
 
         assertThrows(ResourceNotFoundException.class, () -> userController.deleteUser(userId));
     }
-
 }

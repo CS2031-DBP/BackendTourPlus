@@ -12,4 +12,7 @@ public class PersonDto {
 
     @NotBlank(message = "El apellido no puede estar vacío")
     private String lastname;
+
+    @NotBlank(message = "El apellido no puede estar vacío")
+    private String email;
 }

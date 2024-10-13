@@ -1,19 +1,25 @@
 package com.dbp.backendtourplus.booking.domain;
 
 import com.dbp.backendtourplus.booking.dto.BookingDto;
+import com.dbp.backendtourplus.booking.event.BookingCreatedEvent;
 import com.dbp.backendtourplus.booking.infrastructure.BookingRepository;
 import com.dbp.backendtourplus.exceptions.ResourceNotFoundException;
-import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class BookingService {
 
     private final BookingRepository bookingRepository;
+    private final ApplicationEventPublisher eventPublisher;
+
+    public BookingService(BookingRepository bookingRepository, ApplicationEventPublisher eventPublisher) {
+        this.bookingRepository = bookingRepository;
+        this.eventPublisher = eventPublisher;
+    }
 
     public List<Booking> findAll() {
         return bookingRepository.findAll();
@@ -25,10 +31,15 @@ public class BookingService {
 
     public Booking save(BookingDto bookingDto) {
         Booking booking = new Booking();
-        booking.setPerson(bookingDto.getUser()); // Cambia 'setUser' a 'setPerson'
+        booking.setPerson(bookingDto.getUser());
         booking.setTourInstance(bookingDto.getTourInstance());
         booking.setBookingStatus(bookingDto.getBookingStatus());
-        return bookingRepository.save(booking);
+
+        Booking savedBooking = bookingRepository.save(booking);
+
+        eventPublisher.publishEvent(new BookingCreatedEvent(this, savedBooking));
+
+        return savedBooking;
     }
 
     public Booking updateBooking(Long id, BookingDto bookingDto) {

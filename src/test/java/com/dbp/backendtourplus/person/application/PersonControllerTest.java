@@ -83,13 +83,13 @@ public class PersonControllerTest {
         personDto.setFirstname("Jane");
         personDto.setLastname("Doe");
         Person updatedPerson = new Person();
-        when(personService.updatePerson(personId, personDto.getFirstname(), personDto.getLastname())).thenReturn(updatedPerson);
+        when(personService.updatePerson(personId, personDto.getFirstname(), personDto.getLastname(), personDto.getEmail())).thenReturn(updatedPerson);
 
         ResponseEntity<Person> response = personController.updatePerson(personId, personDto);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(updatedPerson, response.getBody());
-        verify(personService, times(1)).updatePerson(personId, personDto.getFirstname(), personDto.getLastname());
+        verify(personService, times(1)).updatePerson(personId, personDto.getFirstname(), personDto.getLastname(), personDto.getEmail());
     }
 
     @Test

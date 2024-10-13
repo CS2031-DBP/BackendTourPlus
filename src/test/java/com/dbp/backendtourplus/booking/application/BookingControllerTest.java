@@ -67,16 +67,18 @@ public class BookingControllerTest {
 
     @Test
     void testCreateBooking() {
-
         BookingDto bookingDto = new BookingDto();
         Booking booking = new Booking();
+
         when(bookingService.save(bookingDto)).thenReturn(booking);
 
-        Booking result = bookingController.createBooking(bookingDto);
+        ResponseEntity<Booking> result = bookingController.createBooking(bookingDto);
 
-        assertEquals(booking, result);
+        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        assertEquals(booking, result.getBody());
         verify(bookingService, times(1)).save(bookingDto);
     }
+
 
     @Test
     void testUpdateBooking_Found() {

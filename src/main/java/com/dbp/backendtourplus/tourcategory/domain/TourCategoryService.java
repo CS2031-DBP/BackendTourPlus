@@ -1,6 +1,7 @@
 package com.dbp.backendtourplus.tourcategory.domain;
 
 import com.dbp.backendtourplus.exceptions.ResourceNotFoundException;
+import com.dbp.backendtourplus.tourcategory.dto.TourCategoryDto;
 import com.dbp.backendtourplus.tourcategory.infrastructure.TourCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,15 +25,18 @@ public class TourCategoryService {
         return tourCategoryRepository.findById(id);
     }
 
-    public TourCategory save(TourCategory tourCategory) {
+    public TourCategory save(TourCategoryDto tourCategoryDto) {
+        TourCategory tourCategory = new TourCategory();
+        tourCategory.setName(tourCategoryDto.getName());
+        tourCategory.setDescription(tourCategoryDto.getDescription());
         return tourCategoryRepository.save(tourCategory);
     }
 
-    public TourCategory update(Long id, TourCategory tourCategoryDetails) {
+    public TourCategory update(Long id, TourCategoryDto tourCategoryDto) {
         return tourCategoryRepository.findById(id)
                 .map(existingCategory -> {
-                    existingCategory.setName(tourCategoryDetails.getName());
-                    existingCategory.setDescription(tourCategoryDetails.getDescription());
+                    existingCategory.setName(tourCategoryDto.getName());
+                    existingCategory.setDescription(tourCategoryDto.getDescription());
                     return tourCategoryRepository.save(existingCategory);
                 }).orElseThrow(() -> new ResourceNotFoundException("Tour Category not found with id: " + id));
     }

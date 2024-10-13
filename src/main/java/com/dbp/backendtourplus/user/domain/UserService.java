@@ -1,11 +1,15 @@
 package com.dbp.backendtourplus.user.domain;
 
+import com.dbp.backendtourplus.email.domain.EmailService;
+import com.dbp.backendtourplus.email.event.EmailEvent;
 import com.dbp.backendtourplus.exceptions.ResourceNotFoundException;
 import com.dbp.backendtourplus.user.dto.UserDto;
 import com.dbp.backendtourplus.user.exceptions.UserAlreadyExistsException;
 import com.dbp.backendtourplus.user.exceptions.UserNotFoundException;
 import com.dbp.backendtourplus.user.infrastructure.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +21,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
 
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
+    @Autowired
+    private EmailService emailService;
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -26,9 +36,9 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
+
     public List<User> findAll() {
-        // Implement the logic to retrieve all users
-        return List.of(new User(), new User());
+        return userRepository.findAll();
     }
 
     public Optional<User> findById(Long id) {
@@ -36,14 +46,15 @@ public class UserService {
     }
 
     public User createUser(User user) {
-        if (user == null) {
-            throw new IllegalArgumentException("User must not be null");
-        }
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new UserAlreadyExistsException("Email already in use");
-        }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+
+        user = userRepository.save(user);
+
+        String subject = "Welcome to TourPlus!";
+        String content = "Thank you for registering. Your account has been created successfully.";
+
+        eventPublisher.publishEvent(new EmailEvent(user.getEmail(), subject, content));
+
+        return user;
     }
 
     public User updateUser(Long id, UserDto userDto) {
@@ -59,6 +70,9 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
 
     public void deleteById(Long id) {
         if (!userRepository.existsById(id)) {

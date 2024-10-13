@@ -4,6 +4,7 @@ import com.dbp.backendtourplus.exceptions.ResourceNotFoundException;
 import com.dbp.backendtourplus.tourinstance.domain.TourInstance;
 import com.dbp.backendtourplus.tourinstance.dto.TourInstanceDto;
 import com.dbp.backendtourplus.tourinstance.domain.TourInstanceService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class TourInstanceController {
     }
 
     @PostMapping
-    public ResponseEntity<TourInstance> createTourInstance(@RequestBody TourInstanceDto tourInstanceDto) {
+    public ResponseEntity<TourInstance> createTourInstance(@Valid @RequestBody TourInstanceDto tourInstanceDto) {
         TourInstance createdTourInstance = tourInstanceService.save(tourInstanceDto);
         return ResponseEntity.ok(createdTourInstance);
     }

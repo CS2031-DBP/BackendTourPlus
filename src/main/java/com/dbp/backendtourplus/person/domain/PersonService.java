@@ -26,12 +26,13 @@ public class PersonService {
         return personRepository.save(person);
     }
 
-    public Person updatePerson(Long id, String firstname, String lastname) {
+    public Person updatePerson(Long id, String firstname, String lastname, String email) {
         Optional<Person> personOptional = personRepository.findById(id);
         if (personOptional.isPresent()) {
             Person person = personOptional.get();
             person.setFirstname(firstname);
             person.setLastname(lastname);
+            person.setEmail(email);
             return personRepository.save(person);
         }
         throw new ResourceNotFoundException("Person not found with id: " + id);

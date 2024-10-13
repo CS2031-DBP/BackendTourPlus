@@ -27,3 +27,4 @@ public class TourDto {
     @NotEmpty(message = "La lista de imágenes no puede estar vacía")
     private List<String> imageUrls;
 }
+

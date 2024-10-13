@@ -44,7 +44,7 @@ public class PersonController {
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Person> updatePerson(@PathVariable Long id, @RequestBody PersonDto personDto) {
-        Person updatedPerson = personService.updatePerson(id, personDto.getFirstname(), personDto.getLastname());
+        Person updatedPerson = personService.updatePerson(id, personDto.getFirstname(), personDto.getLastname(), personDto.getEmail());
         return ResponseEntity.ok(updatedPerson);
     }
 
