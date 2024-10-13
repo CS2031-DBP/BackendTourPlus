@@ -1,6 +1,5 @@
 package com.dbp.backendtourplus.booking.domain;
 
-
 import com.dbp.backendtourplus.person.domain.Person;
 import com.dbp.backendtourplus.tourinstance.domain.TourInstance;
 import jakarta.persistence.*;
@@ -26,7 +25,8 @@ public class Booking {
     private TourInstance tourInstance;
 
     @ManyToOne
-    private Person user;
+    @JoinColumn(name = "person_id")
+    private Person person;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

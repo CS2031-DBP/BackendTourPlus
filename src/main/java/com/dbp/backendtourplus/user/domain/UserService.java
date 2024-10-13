@@ -1,6 +1,7 @@
 package com.dbp.backendtourplus.user.domain;
 
 import com.dbp.backendtourplus.exceptions.ResourceNotFoundException;
+import com.dbp.backendtourplus.user.dto.UserDto;
 import com.dbp.backendtourplus.user.exceptions.UserNotFoundException;
 import com.dbp.backendtourplus.user.infrastructure.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,23 +33,27 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public User save(User user) {
+    public User createUser(User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email already in use");
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
-    public User updateUser(Long id, String firstname, String lastname, String email, String password, Role role) {
+    public User updateUser(Long id, UserDto userDto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
-        user.setFirstname(firstname);
-        user.setLastname(lastname);
-        user.setEmail(email);
-        if (password != null && !password.isEmpty()) {
-            user.setPassword(passwordEncoder.encode(password));
+        user.setFirstname(userDto.getFirstname());
+        user.setLastname(userDto.getLastname());
+        user.setEmail(userDto.getEmail());
+        if (userDto.getPassword() != null && !userDto.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         }
-        user.setRole(role);
+        user.setRole(userDto.getRole());
         return userRepository.save(user);
     }
+
 
     public void deleteById(Long id) {
         if (!userRepository.existsById(id)) {
@@ -57,3 +62,5 @@ public class UserService {
         userRepository.deleteById(id);
     }
 }
+
+

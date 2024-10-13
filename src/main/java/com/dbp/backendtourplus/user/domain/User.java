@@ -45,12 +45,6 @@ public class User implements UserDetails {
     @Transient
     private String rolePrefix = "ROLE_";
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Company> companies;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Person> persons;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(rolePrefix + role.name()));

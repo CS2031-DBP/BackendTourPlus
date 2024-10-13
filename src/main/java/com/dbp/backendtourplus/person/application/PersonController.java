@@ -51,7 +51,7 @@ public class PersonController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePerson(@PathVariable Long id) {
-        if (!personService.findById(id).isPresent()) {
+        if (personService.findById(id).isEmpty()) {
             throw new ResourceNotFoundException("Person not found with id: " + id);
         }
         personService.deleteById(id);
