@@ -95,6 +95,18 @@ Actualmente, los viajeros a menudo enfrentan dificultades al intentar encontrar 
 ### Manejo de Errores:
 Se implementaron excepciones globales para capturar y manejar los errores durante la ejecución de la aplicación.
 
+### Medidas de Seguridad Implementadas:
+
+## Uso de JWT para Autenticación
+- **JWT (JSON Web Token)** es un estándar seguro para intercambiar información entre un cliente y un servidor de manera compacta y auto-contenida. Esta clase genera, verifica y valida tokens JWT, lo cual permite que los usuarios autenticados realicen solicitudes a la aplicación.
+
+## Cifrado del Token JWT:
+- Se utiliza el algoritmo **HMAC256** para firmar los tokens JWT. Este algoritmo simétrico asegura que el token no puede ser alterado sin la clave secreta (almacenada en la propiedad jwt.secret).
+La clave secreta se inyecta en el servicio usando la anotación @Value("${jwt.secret}"), lo que garantiza que no esté expuesta directamente en el código fuente.
+
+## Fecha de Expiración de Tokens:
+- Los tokens generados incluyen una fecha de expiración (withExpiresAt). En este caso, el token es válido por 10 horas. Esto previene el uso de tokens viejos o robados después de que hayan caducado
+
 ## GitHub
 
 Se asignaron tareas a cada miembro del equipo utilizando el sistema de issues de GitHub.
