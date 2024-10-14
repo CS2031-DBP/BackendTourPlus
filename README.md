@@ -58,6 +58,59 @@ La búsqueda y reserva de tours turísticos es complicada y dispersa, lo que dif
 Justificación:
 Actualmente, los viajeros a menudo enfrentan dificultades al intentar encontrar y reservar tours debido a la falta de plataformas que integren todas las funcionalidades necesarias en un solo lugar. TourPlus ofrece una solución completa que combina búsqueda, recomendaciones, pagos seguros y comparaciones en una única plataforma, mejorando la experiencia del usuario y facilitando la planificación de viajes.
 
+## Descripción de la Solución
+
+### Funcionalidades Clave:
+
+- **Barra de Búsqueda y Recomendaciones:** Encuentra tours por destino y muestra recomendaciones principales.
+- **Acceso a Ubicación Actual:** Solicita permiso para acceder a la ubicación del usuario y ofrecer recomendaciones cercanas.
+- **Listado de Tours Disponibles:** Muestra opciones de tours disponibles basados en la ubicación ingresada.
+- **Filtros de Búsqueda:** Filtra tours por categorías como aventura o cultura.
+- **Detalles del Tour:** Muestra imágenes, descripción, horarios y precios del tour seleccionado.
+- **Filtrado por Puntuación:** Permite ordenar los tours según su calificación.
+- **Lista de Favoritos:** Los usuarios pueden guardar tours en una lista para acceder a ellos más tarde.
+- **Reserva de Tours:** Realiza reservas seleccionando fechas, número de personas y completando el pago.
+- **Gestión de Perfiles de Usuario:** Permite registrar, iniciar sesión y gestionar información personal y reservas.
+- **Comentarios y Valoraciones:** Los usuarios pueden dejar opiniones y puntuaciones sobre los tours.
+
+### Tecnologías Utilizadas:
+
+- **Backend:** Spring Boot, Java
+- **APIs Externas:** Google Maps API
+
+## Modelo de Entidades
+
+- **Usuario:** Almacena la información del cliente, como su perfil y preferencias.
+- **Tour:** Contiene detalles de los tours, como descripciones, imágenes, precios y categorías.
+- **Reserva:** Gestiona las reservas de los tours, incluyendo fecha, personas y estado de pago.
+- **Reseña:** Permite a los usuarios dejar valoraciones y comentarios sobre los tours.
+
+## Testing y Manejo de Errores
+
+### Tipos de Pruebas Realizadas:
+- **Pruebas Unitarias:** Aseguran que cada componente funcione de manera aislada.
+- **Pruebas de Integración:** Verifican que los módulos de la aplicación trabajen en conjunto.
+- **Pruebas de Sistema:** Validan que la aplicación completa funcione correctamente.
+
+### Manejo de Errores:
+Se implementaron excepciones globales para capturar y manejar los errores durante la ejecución de la aplicación.
+
+## GitHub
+
+Se asignaron tareas a cada miembro del equipo utilizando el sistema de issues de GitHub.
+
+## Conclusión
+
+**TourPlus** simplifica la búsqueda y selección de tours, ofreciendo recomendaciones personalizadas y pagos seguros. El proyecto logró pasar todas las pruebas, cumpliendo con las funcionalidades esperadas.
+
+### Trabajo Futuro
+
+- Integración de más APIs de tours internacionales.
+- Mejora en el sistema de recomendaciones utilizando machine learning.
+
+## Licencia
+
+Este proyecto está distribuido bajo la licencia IntelliJ IDEA.
 
 
 
