@@ -17,25 +17,25 @@ Integrantes:
 
 # Índice
 
-1. Introducción
-####  1.1. Contexto
-####  1.2. Objetivos del proyecto
+#### 1. Introducción
+1.1. Contexto
+1.2. Objetivos del proyecto
    
-2. Identificación del problema o necesidad
-####  2.1. Descripción del problema
-####  2.2. Justificación
+#### 2. Identificación del problema o necesidad
+2.1. Descripción del problema
+2.2. Justificación
    
-3. Descripción de la solución
-####  3.1. Funcionalidades Implementadas
-####  3.2. Tecnologías Utilizadas
+#### 3. Descripción de la solución
+3.1. Funcionalidades Implementadas
+3.2. Tecnologías Utilizadas
    
-4. Modelo de Entidades
-5. Testing y Manejo de Errores
-6. Medidas de Seguridad Implementadas
-7. Eventos y Asincronía
-8. GitHub
-9. Conclusión
-10. Apéndices
+#### 4. Modelo de Entidades
+#### 5. Testing y Manejo de Errores
+#### 6. Medidas de Seguridad Implementadas
+#### 7. Eventos y Asincronía
+#### 8. GitHub
+#### 9. Conclusión
+#### 10. Apéndices
 
 # Introducción
 
