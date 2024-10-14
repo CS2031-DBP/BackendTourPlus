@@ -51,11 +51,11 @@ Objetivos del Proyecto:
 
 # Identificación del Problema o Necesidad
 
-Descripción del Problema:
+#### Descripción del Problema:
 
-La búsqueda y reserva de tours turísticos es complicada y dispersa, lo que dificulta a los usuarios encontrar opciones adecuadas de manera eficiente.(Falta mejorar)
+Los viajeros enfrentan dificultades al intentar planificar sus tours debido a la falta de plataformas que integren funcionalidades como búsqueda, comparaciones y pagos seguros en un solo lugar. Esto resulta en problemas al momento de viajar y hacer tours.
 
-Justificación:
+#### Justificación:
 Actualmente, los viajeros a menudo enfrentan dificultades al intentar encontrar y reservar tours debido a la falta de plataformas que integren todas las funcionalidades necesarias en un solo lugar. TourPlus ofrece una solución completa que combina búsqueda, recomendaciones, pagos seguros y comparaciones en una única plataforma, mejorando la experiencia del usuario y facilitando la planificación de viajes.
 
 ## Descripción de la Solución
