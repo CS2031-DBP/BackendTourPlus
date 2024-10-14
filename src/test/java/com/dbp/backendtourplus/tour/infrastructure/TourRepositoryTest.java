@@ -1,22 +1,22 @@
 package com.dbp.backendtourplus.tour.infrastructure;
 
-import com.dbp.backendtourplus.AbstractContainerBaseTest;
 import com.dbp.backendtourplus.tour.domain.Tour;
 import com.dbp.backendtourplus.tourcategory.domain.TourCategory;
 import com.dbp.backendtourplus.tourcategory.domain.TourCategoryStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.test.context.SpringBootTest;
-
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-public class TourRepositoryTest extends AbstractContainerBaseTest {
+@DataJpaTest
+@Transactional
+public class TourRepositoryTest {
 
     @Autowired
     private TourRepository tourRepository;
@@ -31,7 +31,7 @@ public class TourRepositoryTest extends AbstractContainerBaseTest {
         TourCategory tourCategory = new TourCategory();
         tourCategory.setName(TourCategoryStatus.NATURE);
         tourCategory.setDescription("A tour of nature.");
-        entityManager.persist(tourCategory);
+        entityManager.persistAndFlush(tourCategory);
 
         tour = new Tour();
         tour.setTitle("City Tour");
@@ -39,10 +39,8 @@ public class TourRepositoryTest extends AbstractContainerBaseTest {
         tour.setPrice(50.0);
         tour.setTourCategory(tourCategory);
 
-        entityManager.persist(tour);
-        entityManager.flush();
+        entityManager.persistAndFlush(tour);
     }
-
 
     @Test
     public void testCreateTour() {
@@ -53,18 +51,15 @@ public class TourRepositoryTest extends AbstractContainerBaseTest {
 
         TourCategory tourCategory = new TourCategory();
         tourCategory.setName(TourCategoryStatus.NATURE);
-        entityManager.persist(tourCategory);
-        newTour.setTourCategory(tour.getTourCategory());
+        entityManager.persistAndFlush(tourCategory);
+        newTour.setTourCategory(tourCategory);
 
-        Tour savedTour = tourRepository.save(newTour);
-        entityManager.flush();
-        entityManager.clear();
+        Tour savedTour = tourRepository.saveAndFlush(newTour);
 
         Optional<Tour> createdTour = tourRepository.findById(savedTour.getId());
         assertTrue(createdTour.isPresent());
         assertEquals(newTour.getTitle(), createdTour.get().getTitle());
     }
-
 
     @Test
     public void testFindById() {
@@ -78,8 +73,9 @@ public class TourRepositoryTest extends AbstractContainerBaseTest {
     @Test
     public void testDeleteById() {
         tourRepository.deleteById(tour.getId());
+        entityManager.flush();
+
         Optional<Tour> optionalDeletedTour = tourRepository.findById(tour.getId());
         assertFalse(optionalDeletedTour.isPresent(), "El tour no se eliminó correctamente");
     }
-
 }

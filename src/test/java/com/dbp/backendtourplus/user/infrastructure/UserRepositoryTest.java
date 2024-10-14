@@ -1,20 +1,21 @@
 package com.dbp.backendtourplus.user.infrastructure;
 
-import com.dbp.backendtourplus.AbstractContainerBaseTest;
 import com.dbp.backendtourplus.user.domain.User;
 import com.dbp.backendtourplus.user.domain.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-public class UserRepositoryTest extends AbstractContainerBaseTest {
+@DataJpaTest
+@Transactional
+public class UserRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
@@ -33,8 +34,7 @@ public class UserRepositoryTest extends AbstractContainerBaseTest {
         user.setPassword("SecurePassword123");
         user.setRole(Role.USER);
 
-        entityManager.persist(user);
-        entityManager.flush();
+        entityManager.persistAndFlush(user);
     }
 
     @Test
@@ -46,9 +46,7 @@ public class UserRepositoryTest extends AbstractContainerBaseTest {
         newUser.setPassword("AnotherSecurePassword");
         newUser.setRole(Role.ADMIN);
 
-        User savedUser = userRepository.save(newUser);
-        entityManager.flush();
-        entityManager.clear();
+        User savedUser = userRepository.saveAndFlush(newUser);
 
         Optional<User> createdUser = userRepository.findById(savedUser.getId());
         assertTrue(createdUser.isPresent());
@@ -67,6 +65,8 @@ public class UserRepositoryTest extends AbstractContainerBaseTest {
     @Test
     public void testDeleteById() {
         userRepository.deleteById(user.getId());
+        entityManager.flush();
+
         Optional<User> optionalDeletedUser = userRepository.findById(user.getId());
         assertFalse(optionalDeletedUser.isPresent(), "El usuario no se eliminó correctamente");
     }
