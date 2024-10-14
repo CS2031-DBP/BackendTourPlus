@@ -88,27 +88,27 @@ Actualmente, los viajeros a menudo enfrentan dificultades al intentar encontrar 
 ## Testing y Manejo de Errores
 
 ### Tipos de Pruebas Realizadas:
-**Pruebas Unitarias:** Aseguran que cada componente funcione de manera aislada.
-  - UserTest: Verifica la correcta creación de un objeto User y la manipulación de sus atributos.
-  - RideTest: Asegura que los métodos de cálculo de tarifas en la clase Ride funcionen como se espera.
-  - ReviewTest: Comprueba la validación de comentarios y calificaciones al crear un Review.
-  - PassengerTest: Verifica la lógica de añadir y eliminar coordenadas en la clase Passenger.
-  - DriverTest: Asegura que los métodos de asignación de viajes en la clase Driver operen correctamente.
-  - AuthServiceTest: Comprueba la autenticación de usuarios y el manejo de contraseñas.
-**Pruebas de Integración:** Verifican que los módulos de la aplicación trabajen en conjunto.
-  - UserRepositoryTest: Verifica la persistencia y recuperación de usuarios en la base de datos.
-  - RideRepositoryTest: Asegura que los viajes se guarden correctamente y se recuperen según criterios específicos.
-  - ReviewRepositoryTest: Comprueba la creación y recuperación de reseñas de viajes en la base de datos.
-  - UserServiceTest: Verifica la lógica de negocio al interactuar con el UserRepository.
-  - RideServiceTest: Asegura que las tarifas se calculen y los viajes se asignen correctamente a los pasajeros.
-  - ApplicationContextTest: Verifica que todos los componentes del contexto de la aplicación se carguen correctamente.
-**Pruebas de Aceptación:** Validan los procesos de la aplicación.
-  - UserAcceptanceTest: Valida el registro, inicio de sesión y obtención de un usuario a través de la API.
-  - RideAcceptanceTest: Comprueba el flujo completo de creación y aceptación de un viaje.
-  - ReviewAcceptanceTest: Valida la creación y visualización de reseñas de un viaje a través de la API.
-  - PaymentAcceptanceTest: Asegura que el proceso de pago funcione correctamente desde la solicitud hasta la confirmación.
-  - SearchAcceptanceTest: Verifica que los usuarios puedan buscar y filtrar viajes según diferentes criterios.
-  - AdminAcceptanceTest: Comprueba las funcionalidades administrativas, como la gestión de usuarios y viajes, a través de la API.
+- **Pruebas Unitarias:** Aseguran que cada componente funcione de manera aislada.
+   UserTest: Verifica la correcta creación de un objeto User y la manipulación de sus atributos.
+   RideTest: Asegura que los métodos de cálculo de tarifas en la clase Ride funcionen como se espera.
+   ReviewTest: Comprueba la validación de comentarios y calificaciones al crear un Review.
+   PassengerTest: Verifica la lógica de añadir y eliminar coordenadas en la clase Passenger.
+   DriverTest: Asegura que los métodos de asignación de viajes en la clase Driver operen correctamente.
+   AuthServiceTest: Comprueba la autenticación de usuarios y el manejo de contraseñas.
+- **Pruebas de Integración:** Verifican que los módulos de la aplicación trabajen en conjunto.
+   UserRepositoryTest: Verifica la persistencia y recuperación de usuarios en la base de datos.
+   RideRepositoryTest: Asegura que los viajes se guarden correctamente y se recuperen según criterios específicos.
+   ReviewRepositoryTest: Comprueba la creación y recuperación de reseñas de viajes en la base de datos.
+   UserServiceTest: Verifica la lógica de negocio al interactuar con el UserRepository.
+   RideServiceTest: Asegura que las tarifas se calculen y los viajes se asignen correctamente a los pasajeros.
+   ApplicationContextTest: Verifica que todos los componentes del contexto de la aplicación se carguen correctamente.
+- **Pruebas de Aceptación:** Validan los procesos de la aplicación.
+   UserAcceptanceTest: Valida el registro, inicio de sesión y obtención de un usuario a través de la API.
+   RideAcceptanceTest: Comprueba el flujo completo de creación y aceptación de un viaje.
+   ReviewAcceptanceTest: Valida la creación y visualización de reseñas de un viaje a través de la API.
+   PaymentAcceptanceTest: Asegura que el proceso de pago funcione correctamente desde la solicitud hasta la confirmación.
+   SearchAcceptanceTest: Verifica que los usuarios puedan buscar y filtrar viajes según diferentes criterios.
+   AdminAcceptanceTest: Comprueba las funcionalidades administrativas, como la gestión de usuarios y viajes, a través de la API.
 - **Pruebas de Sistema:** Validan que la aplicación completa funcione correctamente.
 
 ## Resultados:
