@@ -23,16 +23,16 @@ IP del Deployment: 34.226.242.64
 
 # Índice
 
-1. Introducción
-2. Identificación del problema o necesidad
-3. Descripción de la solución 
-4. Modelo de Entidades
-5. Testing y Manejo de Errores
-6. Medidas de Seguridad Implementadas
-7. Eventos y Asincronía
-8. GitHub
-9. Conclusión
-10. Apéndices
+1. [Introducción](#Introducción)
+2. [Identificación del Problema o Necesidad](#Identificación-del-Problema-o-Necesidad)
+3. [Descripción de la Solución](#Descripción-de-la-Solución) 
+4. [Modelo de Entidades](#Modelo-de-Entidades)
+5. [Testing y Manejo de Errores](#Testing-y-Manejo-de-Errores)
+6. [Medidas de Seguridad Implementadas](#Medidas-de-Seguridad-Implementadas)
+7. [Eventos y Asincronía](#Eventos-y-Asincronía)
+8. [GitHub](#GitHub)
+9. [Conclusión](#Conclusión)
+10. [Licencia](#Licencia)
 
 # Introducción
 
@@ -55,9 +55,10 @@ Los viajeros enfrentan dificultades al intentar planificar sus tours debido a la
 Justificación:
 
 Actualmente, los viajeros a menudo enfrentan dificultades al intentar encontrar y reservar tours debido a la falta de plataformas que integren todas las funcionalidades necesarias en un solo lugar. TourPlus ofrece una solución completa que combina búsqueda, recomendaciones, pagos seguros y comparaciones en una única plataforma, mejorando la experiencia del usuario y facilitando la planificación de viajes.
-## Descripción de la Solución
 
-### Funcionalidades Clave:
+# Descripción de la Solución
+
+## Funcionalidades Clave:
 
 - **Barra de Búsqueda y Recomendaciones:** Encuentra tours por destino y muestra recomendaciones principales.
 - **Listado de Tours Disponibles:** Muestra opciones de tours disponibles basados en la ubicación ingresada.
@@ -67,16 +68,18 @@ Actualmente, los viajeros a menudo enfrentan dificultades al intentar encontrar 
 - **Gestión de Perfiles de Usuario:** Permite registrar, iniciar sesión y gestionar información personal y reservas.
 - **Comentarios y Valoraciones:** Los usuarios pueden dejar opiniones y puntuaciones sobre los tours.
 
-### Tecnologías Utilizadas:
+## Tecnologías Utilizadas:
 
 - **Backend:** Spring Boot, Java, PostgreSQL, Docker, Testcontainers.
 - **Deployment en cloud:** Amazon Web Services (AWS) 
 
-## Modelo de Entidades
+# Modelo de Entidades
+
+## Diagrama de Entidades
 
 ![Modelo de Entidades](images/Diagrama.jpg)
 
-### Descripción de Entidades
+## Descripción de Entidades
 
 En **TourPlus**, las entidades principales son:
 
@@ -116,7 +119,7 @@ En **TourPlus**, las entidades principales son:
   - **Atributos**: `id`, `rating`, `comment`.
   - **Relaciones**: Muchos a uno con `User` y `Tour`.
 
-### Resumen de Relaciones
+## Resumen de Relaciones
 - Un `User` es una `Person` o `Company`.
 - Un `Person` tiene múltiples `Booking`.
 - Una `Company` ofrece múltiples `Tour`.
@@ -124,7 +127,7 @@ En **TourPlus**, las entidades principales son:
 - Un `Booking` se asocia a una `TourInstance`.
 - Cada `Tour` tiene una `Location`.
 
-### Testing y Manejo de Errores
+# Testing y Manejo de Errores
 
 **Niveles de Testing Realizados**
 
@@ -166,19 +169,19 @@ El manejo adecuado de excepciones es crucial para mejorar la experiencia del usu
 
 
 
-## Medidas de Seguridad Implementadas:
+# Medidas de Seguridad Implementadas:
 
-### Uso de JWT para Autenticación
+## Uso de JWT para Autenticación
 - **JWT (JSON Web Token)** es un estándar seguro para intercambiar información entre un cliente y un servidor de manera compacta y auto-contenida. Esta clase genera, verifica y valida tokens JWT, lo cual permite que los usuarios autenticados realicen solicitudes a la aplicación.
 
-### Cifrado del Token JWT:
+## Cifrado del Token JWT:
 - Se utiliza el algoritmo **HMAC256** para firmar los tokens JWT. Este algoritmo simétrico asegura que el token no puede ser alterado sin la clave secreta (almacenada en la propiedad jwt.secret).
 La clave secreta se inyecta en el servicio usando la anotación @Value("${jwt.secret}"), lo que garantiza que no esté expuesta directamente en el código fuente.
 
-### Fecha de Expiración de Tokens:
+## Fecha de Expiración de Tokens:
 - Los tokens generados incluyen una fecha de expiración (withExpiresAt). En este caso, el token es válido por 10 horas. Esto previene el uso de tokens viejos o robados después de que hayan caducado
 
-## Eventos y Asincronía:
+# Eventos y Asincronía:
 
 **Eventos Utilizados**
 
@@ -198,11 +201,11 @@ La implementación de eventos en TourPlus es crucial por varias razones:
 
 - **Escalabilidad**: La arquitectura de eventos permite que la aplicación escale fácilmente al integrar nuevos servicios o funcionalidades sin perturbar el sistema existente.
 
-## GitHub
+# GitHub
 
 Se asignaron tareas a cada miembro del equipo utilizando el sistema de issues de GitHub y tras el culmino de cada una de estas se dio por finalizado el issue.
 
-## Conclusión
+# Conclusión
 
 Logros del Proyecto:
 
@@ -216,7 +219,7 @@ Trabajo Futuro:
 
 Tenemos en mente mejorar la integración con más proveedores de tours y añadir funciones de inteligencia artificial para ofrecer recomendaciones aún más precisas.
 
-## Licencia
+# Licencia
 
 Apache License
 Version 2.0, January 2004
