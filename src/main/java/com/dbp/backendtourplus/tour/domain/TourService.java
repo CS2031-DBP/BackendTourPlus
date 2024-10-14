@@ -28,7 +28,13 @@ public class TourService {
 
     public Tour save(TourDto tourDto) {
         Tour tour = new Tour();
+
         populateTourFromDto(tour, tourDto);
+
+        TourCategory category = tourCategoryRepository.findById(tourDto.getTourCategory())
+                .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada con ID: " + tourDto.getTourCategory()));
+        tour.setTourCategory(category);
+
         return tourRepository.save(tour);
     }
 

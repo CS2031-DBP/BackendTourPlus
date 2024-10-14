@@ -1,9 +1,9 @@
 package com.dbp.backendtourplus.tour.application;
 
-import com.dbp.backendtourplus.exceptions.ResourceNotFoundException;
 import com.dbp.backendtourplus.tour.domain.Tour;
 import com.dbp.backendtourplus.tour.domain.TourService;
 import com.dbp.backendtourplus.tour.dto.TourDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,13 +31,13 @@ public class TourController {
     }
 
     @PostMapping
-    public ResponseEntity<Tour> createTour(@RequestBody TourDto tourDto) {
+    public ResponseEntity<Tour> createTour(@Valid @RequestBody TourDto tourDto) {
         Tour createdTour = tourService.save(tourDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTour);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Tour> updateTour(@PathVariable Long id, @RequestBody TourDto tourDto) {
+    public ResponseEntity<Tour> updateTour(@PathVariable Long id, @Valid @RequestBody TourDto tourDto) {
         Tour updatedTour = tourService.updateTour(id, tourDto);
         return ResponseEntity.ok(updatedTour);
     }

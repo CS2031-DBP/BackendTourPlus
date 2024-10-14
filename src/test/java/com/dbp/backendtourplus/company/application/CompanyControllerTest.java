@@ -5,96 +5,126 @@ import com.dbp.backendtourplus.company.domain.CompanyService;
 import com.dbp.backendtourplus.company.dto.CompanyDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class CompanyControllerTest {
+@SpringBootTest
+public class CompanyControllerTest {
 
-    @InjectMocks
     private CompanyController companyController;
-
-    @Mock
     private CompanyService companyService;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        companyService = Mockito.mock(CompanyService.class);
+        companyController = new CompanyController(companyService);
     }
 
     @Test
     void testGetAllCompanies() {
-        when(companyService.getAllCompanies()).thenReturn(Collections.singletonList(new Company()));
+        Company company1 = new Company();
+        Company company2 = new Company();
+        when(companyService.getAllCompanies()).thenReturn(Arrays.asList(company1, company2));
 
-        var companies = companyController.getAllCompanies();
-        assertThat(companies).isNotEmpty();
+        List<Company> result = companyController.getAllCompanies();
+
+        assertEquals(2, result.size());
         verify(companyService, times(1)).getAllCompanies();
     }
 
     @Test
-    void testGetCompanyById() {
+    void testGetCompanyById_Found() {
+        Long companyId = 1L;
         Company company = new Company();
-        company.setId(1L);
-        when(companyService.getCompanyById(1L)).thenReturn(Optional.of(company));
+        when(companyService.getCompanyById(companyId)).thenReturn(Optional.of(company));
 
-        var response = companyController.getCompanyById(1L);
-        assertThat(response.getStatusCode().value()).isEqualTo(200);
-        verify(companyService, times(1)).getCompanyById(1L);
+        ResponseEntity<Company> response = companyController.getCompanyById(companyId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(company, response.getBody());
+    }
+
+    @Test
+    void testGetCompanyById_NotFound() {
+        Long companyId = 1L;
+        when(companyService.getCompanyById(companyId)).thenReturn(Optional.empty());
+
+        ResponseEntity<Company> response = companyController.getCompanyById(companyId);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
     void testCreateCompany() {
         CompanyDto companyDto = new CompanyDto();
+        companyDto.setId(1L);
         companyDto.setName("Test Company");
         companyDto.setRuc("123456789");
-        companyDto.setEmail("test@example.com");
 
         Company company = new Company();
-        company.setId(1L);
-        company.setName(companyDto.getName());
-        company.setRuc(companyDto.getRuc());
-        company.setEmail(companyDto.getEmail());
+        when(companyService.createCompany(companyDto.getId(), companyDto.getName(), companyDto.getRuc())).thenReturn(company);
 
-        when(companyService.createCompany(any(), any(), any(), any())).thenReturn(company);
+        Company result = companyController.createCompany(companyDto);
 
-        var response = companyController.createCompany(companyDto);
-        assertThat(response.getName()).isEqualTo("Test Company");
-        verify(companyService, times(1)).createCompany(any(), any(), any(), any());
+        assertEquals(company, result);
+        verify(companyService, times(1)).createCompany(companyDto.getId(), companyDto.getName(), companyDto.getRuc());
     }
 
     @Test
-    void testUpdateCompany() {
+    void testUpdateCompany_Found() {
+        Long companyId = 1L;
+        CompanyDto companyDto = new CompanyDto();
+        companyDto.setName("Updated Company");
+        companyDto.setRuc("987654321");
+
         Company existingCompany = new Company();
-        existingCompany.setId(1L);
-        existingCompany.setName("Old Company");
-        existingCompany.setRuc("987654321");
-        existingCompany.setEmail("old@example.com");
+        when(companyService.getCompanyById(companyId)).thenReturn(Optional.of(existingCompany));
+        when(companyService.updateCompany(companyId, companyDto.getName(), companyDto.getRuc())).thenReturn(existingCompany);
 
-        when(companyService.getCompanyById(1L)).thenReturn(Optional.of(existingCompany));
+        ResponseEntity<Company> response = companyController.updateCompany(companyId, companyDto);
 
-        CompanyDto updatedDto = new CompanyDto();
-        updatedDto.setName("Updated Company");
-        updatedDto.setRuc("123456789");
-        updatedDto.setEmail("updated@example.com");
-
-        var response = companyController.updateCompany(1L, updatedDto);
-        assertThat(response.getStatusCode().value()).isEqualTo(200);
-        verify(companyService, times(1)).updateCompany(any(), any(), any(), any());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(existingCompany, response.getBody());
     }
 
     @Test
-    void testDeleteCompany() {
-        when(companyService.getCompanyById(1L)).thenReturn(Optional.of(new Company()));
+    void testUpdateCompany_NotFound() {
+        Long companyId = 1L;
+        CompanyDto companyDto = new CompanyDto();
+        when(companyService.getCompanyById(companyId)).thenReturn(Optional.empty());
 
-        var response = companyController.deleteCompany(1L);
-        assertThat(response.getStatusCode().value()).isEqualTo(204);
-        verify(companyService, times(1)).deleteCompany(1L);
+        ResponseEntity<Company> response = companyController.updateCompany(companyId, companyDto);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    void testDeleteCompany_Found() {
+        Long companyId = 1L;
+        when(companyService.getCompanyById(companyId)).thenReturn(Optional.of(new Company()));
+
+        ResponseEntity<Void> response = companyController.deleteCompany(companyId);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        verify(companyService, times(1)).deleteCompany(companyId);
+    }
+
+    @Test
+    void testDeleteCompany_NotFound() {
+        Long companyId = 1L;
+        when(companyService.getCompanyById(companyId)).thenReturn(Optional.empty());
+
+        ResponseEntity<Void> response = companyController.deleteCompany(companyId);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 }

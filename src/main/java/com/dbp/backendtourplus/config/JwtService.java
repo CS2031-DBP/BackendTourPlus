@@ -37,7 +37,7 @@ public class JwtService {
 
         return JWT.create()
                 .withSubject(data.getUsername())
-                .withClaim("role", data.getAuthorities().toArray()[0].toString())
+                .withClaim("role", data.getAuthorities().iterator().next().getAuthority())
                 .withIssuedAt(now)
                 .withExpiresAt(expiration)
                 .sign(algorithm);

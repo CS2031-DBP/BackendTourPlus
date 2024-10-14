@@ -4,7 +4,9 @@ import com.dbp.backendtourplus.booking.domain.Booking;
 import com.dbp.backendtourplus.booking.domain.BookingService;
 import com.dbp.backendtourplus.booking.dto.BookingDto;
 import com.dbp.backendtourplus.exceptions.ResourceNotFoundException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -37,8 +39,9 @@ public class BookingController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping
-    public Booking createBooking(@RequestBody BookingDto bookingDto) {
-        return bookingService.save(bookingDto);
+    public ResponseEntity<Booking> createBooking(@Valid @RequestBody BookingDto bookingDto) {
+        Booking booking = bookingService.save(bookingDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(booking);
     }
 
     @PreAuthorize("isAuthenticated()")
