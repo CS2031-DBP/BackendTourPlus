@@ -18,16 +18,16 @@ Integrantes:
 # Índice
 
 1. Introducción
-  1.1. Contexto
-  1.2. Objetivos del proyecto
+####  1.1. Contexto
+####  1.2. Objetivos del proyecto
    
 2. Identificación del problema o necesidad
-  2.1. Descripción del problema
-  2.2. Justificación
+####  2.1. Descripción del problema
+####  2.2. Justificación
    
 3. Descripción de la solución
-  3.1. Funcionalidades Implementadas
-  3.2. Tecnologías Utilizadas
+####  3.1. Funcionalidades Implementadas
+####  3.2. Tecnologías Utilizadas
    
 4. Modelo de Entidades
 5. Testing y Manejo de Errores
