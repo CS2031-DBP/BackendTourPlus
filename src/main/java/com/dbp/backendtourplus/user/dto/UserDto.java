@@ -22,4 +22,7 @@ public class UserDto {
 
     private Role role;
 
+    @NotBlank(message = "El número de teléfono no puede estar vacío")
+    private String phoneNumber;
+
 }

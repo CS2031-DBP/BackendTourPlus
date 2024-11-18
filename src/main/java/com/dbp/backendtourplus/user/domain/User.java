@@ -5,6 +5,7 @@ import com.dbp.backendtourplus.company.domain.Company;
 import com.dbp.backendtourplus.person.domain.Person;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -40,10 +41,13 @@ public class User implements UserDetails {
     private String password;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "role")
     private Role role;
 
     @Transient
     private String rolePrefix = "ROLE_";
+
+    private String phoneNumber;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

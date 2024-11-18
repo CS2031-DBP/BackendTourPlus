@@ -57,9 +57,16 @@ public class AuthService {
         newUser.setEmail(req.getEmail());
         newUser.setPassword(passwordEncoder.encode(req.getPassword()));
         newUser.setRole(Role.USER);
+        newUser.setPhoneNumber(req.getPhoneNumber());
+
+        // Lógica para asignar el rol ADMIN si cumple con un criterio
+        if (req.getEmail().equalsIgnoreCase("jhonchilo184@gmail.com")) {
+            newUser.setRole(Role.ADMIN); // Asignar ADMIN si el correo coincide con un criterio
+        } else {
+            newUser.setRole(Role.USER); // Asignar USER por defecto
+        }
 
         userRepository.save(newUser);
-
 
         JwtAuthResponse response = new JwtAuthResponse();
         response.setToken(jwtService.generateToken(newUser));

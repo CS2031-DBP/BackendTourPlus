@@ -18,4 +18,7 @@ public class RegisterReq {
 
     @NotBlank(message = "La contraseña no puede estar vacía")
     private String password;
+
+    @NotBlank(message = "El número de teléfono no puede estar vacío")
+    private String phoneNumber;
 }

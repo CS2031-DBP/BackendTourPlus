@@ -63,7 +63,9 @@ public class SecurityConfig {
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
+                System.out.println("CORS configuration applied");
             }
         };
     }
+
 }
