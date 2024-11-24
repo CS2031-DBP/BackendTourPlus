@@ -12,7 +12,6 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class TourCategoryService {
 
     private final TourCategoryRepository tourCategoryRepository;
@@ -33,18 +32,14 @@ public class TourCategoryService {
     }
 
     public TourCategory update(Long id, TourCategoryDto tourCategoryDto) {
-        return tourCategoryRepository.findById(id)
-                .map(existingCategory -> {
-                    existingCategory.setName(tourCategoryDto.getName());
-                    existingCategory.setDescription(tourCategoryDto.getDescription());
-                    return tourCategoryRepository.save(existingCategory);
-                }).orElseThrow(() -> new ResourceNotFoundException("Tour Category not found with id: " + id));
+        TourCategory tourCategory = tourCategoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tour Category not found with id: " + id));
+        tourCategory.setName(tourCategoryDto.getName());
+        tourCategory.setDescription(tourCategoryDto.getDescription());
+        return tourCategoryRepository.save(tourCategory);
     }
 
     public void deleteById(Long id) {
-        if (!tourCategoryRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Tour Category not found with id: " + id);
-        }
         tourCategoryRepository.deleteById(id);
     }
 }
